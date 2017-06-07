@@ -46,14 +46,14 @@ const string str_collections = "Collections: ";
 /* command error messages */
 const string str_unhandled_command = "Unrecognized command!";
 const string str_lib_dupe = "Library already has a record with this title!";
-const string str_cat_coll_dupe = "Catalog already has a collection with this name!";
+const string str_coll_dupe = "Catalog already has a collection with this name!";
 //"Record is already a member in the collection!"
 //"Record is not a member in the collection!"
 //"Cannot delete a record that is a member of a collection!"
 //"Cannot clear all records unless all collections are empty!"
 const string str_record_title_not_exist = "No record with that title!";
 const string str_record_id_not_exist = "No record with that ID!";
-const string str_cat_not_exist = "No collection with that name!";
+const string str_coll_not_exist = "No collection with that name!";
 //"Could not read a title!"
 //"Could not read an integer value!"
 const string str_rating_oob = "Rating is out of range!";

@@ -87,7 +87,7 @@ void catalog::print_collection(string name)
         return;
     }
 
-    cout << "Collection " << name << " contains:" << std::endl;
+    cout << "Collection " << name << " contains:" << std::endl;;
     p->print();
 }
 

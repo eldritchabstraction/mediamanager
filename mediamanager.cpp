@@ -71,6 +71,11 @@ static void parse(vector<string> input)
         collection_name.pop_back();
 
         gcatalog->add_collection(collection_name);
+    } else if (command == "am") {
+        // add record id to collection
+        string collection_name = input[1];
+        string record_id = input[2];
+        gcatalog->add_member(collection_name, record_id);
     } else if (command == "pa") {
         // print allocations
         std::cout << str_mem_alloc << std::endl;
@@ -86,6 +91,10 @@ static void parse(vector<string> input)
     } else if (command == "pC") {
         // print catalog
         gcatalog->print();
+    } else if (command == "pc") {
+        // print collection
+        string collection_name = input[1];
+        gcatalog->print_collection(collection_name);
     } else if (command == "fr") {
         // find and print record title
         string title;
