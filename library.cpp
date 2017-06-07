@@ -22,14 +22,14 @@ int library::add_record(string medium, string title)
     // check for duplicate names
     for (auto it = library_.begin(); it != library_.end(); ++it)
     {
-        if (it->title() == title)
+        if ((*it)->title() == title)
         {
             cout << str_lib_dupe << std::endl;
             return 1;
         }
     }
 
-    library_.push_back(record(medium, title, id_counter_));
+    library_.push_back(new record(medium, title, id_counter_));
     cout << "Record " << id_counter_  << " added\n";
 
     id_counter_++;
@@ -47,9 +47,9 @@ void library::print(void)
     }
 
     cout << "Library contains " << records_count_ << " records:\n";
-    for (auto record_it : library_)
+    for (auto p: library_)
     {
-        record_it.print();
+        p->print();
     }
 }
 
@@ -62,7 +62,7 @@ struct ftor_record_id_cmp
 {
 public:
     ftor_record_id_cmp(int id): candidate_(id) {};
-    bool operator()(record &r) { return (r.id() == candidate_); }
+    bool operator()(record *r) { return (r->id() == candidate_); }
 
 private:
     int candidate_;
@@ -70,23 +70,23 @@ private:
 
 void library::print_id(string id)
 {
-    auto record_it = find_if(library_.begin(), library_.end(),
+    auto it = find_if(library_.begin(), library_.end(),
                              ftor_record_id_cmp(std::stoi(id, nullptr, 10)));
 
-    if (record_it == library_.end())
+    if (it == library_.end())
     {
         cout << str_record_id_not_exist << std::endl;
         return;
     }
 
-    record_it->print();
+    (*it)->print();
 }
 
 struct ftor_record_title_cmp
 {
 public:
     ftor_record_title_cmp(string title): candidate_(title) {};
-    bool operator()(record &r) { return (r.title() == candidate_); }
+    bool operator()(record *r) { return (r->title() == candidate_); }
 
 private:
     string candidate_;
@@ -94,16 +94,16 @@ private:
 
 void library::print_title(string title)
 {
-    auto record_it = find_if(library_.begin(), library_.end(),
+    auto it = find_if(library_.begin(), library_.end(),
                              ftor_record_title_cmp(title));
 
-    if (record_it == library_.end())
+    if (it == library_.end())
     {
         cout << str_record_title_not_exist << std::endl;
         return;
     }
 
-    record_it->print();
+    (*it)->print();
 }
 
 void library::modify_rating(string id, string rating)
@@ -113,34 +113,34 @@ void library::modify_rating(string id, string rating)
         std::cout << str_rating_oob << std::endl;
         return;
     }
-    auto record_it = find_if(library_.begin(), library_.end(),
+    auto it = find_if(library_.begin(), library_.end(),
                              ftor_record_id_cmp(std::stoi(id, nullptr, 10)));
 
-    if (record_it == library_.end())
+    if (it == library_.end())
     {
         cout << str_record_id_not_exist << std::endl;
         return;
     }
 
-    record_it->set_rating(rating);
+    (*it)->set_rating(rating);
 
-    cout << "Rating for record " << record_it->id() << " changed to " << rating << std::endl;
+    cout << "Rating for record " << (*it)->id() << " changed to " << rating << std::endl;
 }
 
 void library::delete_record(string title)
 {
-    auto record_it = find_if(library_.begin(), library_.end(),
+    auto it = find_if(library_.begin(), library_.end(),
                              ftor_record_title_cmp(title));
 
-    if (record_it == library_.end())
+    if (it == library_.end())
     {
         cout << str_record_title_not_exist << std::endl;
         return;
     }
 
-    std::cout << "Record " << record_it->id() << " " << record_it->title() << " deleted\n";
+    std::cout << "Record " << (*it)->id() << " " << (*it)->title() << " deleted\n";
 
-    library_.erase(record_it);
+    library_.erase(it);
     records_count_--;
 }
 

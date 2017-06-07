@@ -41,7 +41,7 @@ private:
 
     int id_counter_;
     int records_count_;
-    std::vector<record> library_;
+    std::vector<record*> library_;
 };
 
 #endif
