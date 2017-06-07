@@ -25,9 +25,9 @@ private:
 
 void catalog::add_collection(string name)
 {
-    auto collection_it = find_if(catalog_.begin(), catalog_.end(), collection_cmp_ftor(name));
+    collection *p = find_collection_by_name(name);
 
-    if (collection_it != catalog_.end())
+    if (p != nullptr)
     {
         cout << str_cat_coll_dupe << std::endl;
         return;
@@ -45,18 +45,28 @@ void catalog::add_member(string name, string id)
 
 }
 
-void catalog::print_collection(string name)
+collection *catalog::find_collection_by_name(string name)
 {
     auto it = find_if(catalog_.begin(), catalog_.end(), collection_cmp_ftor(name));
 
-    if (it == catalog_.end())
+    if (it != catalog_.end())
+        return nullptr;
+    else
+        return *it;
+}
+
+void catalog::print_collection(string name)
+{
+    collection *p = find_collection_by_name(name);
+
+    if (p == nullptr)
     {
         cout << str_cat_not_exist << std::endl;
         return;
     }
 
     cout << "Collection " << name << " contains:\n";
-    (*it)->print();
+    p->print();
 }
 
 void catalog::print(void)

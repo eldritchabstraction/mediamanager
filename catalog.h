@@ -18,6 +18,8 @@ public:
 
     void add_member(std::string collection_name, std::string record_id);
 
+    collection *find_collection_by_name(string collection_name);
+
     void print(void);
     void print_collection(std::string collection_name);
     void print_alloc(void);
