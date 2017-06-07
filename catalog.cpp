@@ -15,9 +15,9 @@ struct collection_compare
 public:
     collection_compare(string candidate): candidate_(candidate) {};
 
-    bool operator()(collection &c)
+    bool operator()(collection *c)
     {
-        return (c.name() == candidate_);
+        return (c->name() == candidate_);
     }
 
 
@@ -35,7 +35,7 @@ void catalog::add_collection(string name)
         return;
     }
 
-    catalog_.push_back(collection(name));
+    catalog_.push_back(new collection(name));
     cout << "Collection " << name << " added\n";
 
     collection_count_++;
@@ -48,16 +48,16 @@ void catalog::add_member(string name, string id)
 
 void catalog::print_collection(string name)
 {
-    auto collection_it = find_if(catalog_.begin(), catalog_.end(), collection_compare(name));
+    auto it = find_if(catalog_.begin(), catalog_.end(), collection_compare(name));
 
-    if (collection_it == catalog_.end())
+    if (it == catalog_.end())
     {
         cout << str_cat_not_exist << std::endl;
         return;
     }
 
     cout << "Collection " << name << " contains:\n";
-    collection_it->print();
+    (*it)->print();
 }
 
 void catalog::print(void)
@@ -70,10 +70,10 @@ void catalog::print(void)
 
     cout << "Catalog contains " << collection_count_ << " collections:/n";
 
-    for (auto collection_it : catalog_)
+    for (auto p : catalog_)
     {
-        cout << "Collection " << collection_it.name() << " contains:\n";
-        collection_it.print();
+        cout << "Collection " << p->name() << " contains:\n";
+        p->print();
     }
 }
 

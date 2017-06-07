@@ -34,7 +34,7 @@ public:
 private:
     int collection_count_;
 
-    std::list<collection> catalog_;
+    std::list<collection*> catalog_;
 };
 
 #endif
