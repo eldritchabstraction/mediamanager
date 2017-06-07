@@ -4,6 +4,7 @@
 
 #include "strings.h"
 #include "catalog.h"
+#include "library.h"
 
 using std::cout;
 using std::string;
@@ -13,14 +14,17 @@ catalog * catalog::s_instance = NULL;
 struct collection_cmp_ftor
 {
 public:
-    collection_cmp_ftor(string candidate): candidate_(candidate) {};
+    collection_cmp_ftor(string name): name_(name) {};
 
     bool operator()(collection *c)
     {
-        return (c->name() == candidate_);
+        if (c->name() == name_)
+            return 1;
+        else
+            return 0;
     }
 private:
-    string candidate_;
+    string name_;
 };
 
 void catalog::add_collection(string name)
@@ -29,7 +33,7 @@ void catalog::add_collection(string name)
 
     if (p != nullptr)
     {
-        cout << str_cat_coll_dupe << std::endl;
+        cout << str_coll_dupe << std::endl;
         return;
     }
 
@@ -41,15 +45,33 @@ void catalog::add_collection(string name)
 
 void catalog::add_member(string name, string id)
 {
+    // check if collection exists
+    collection *c_p = find_collection_by_name(name);
 
+    if (c_p == nullptr)
+    {
+        cout << str_coll_not_exist << std::endl;
+        return;
+    }
 
+    record *r_p = library::instance()->find_record_by_id(id);
+
+    if (r_p == nullptr)
+    {
+        cout << str_record_id_not_exist << std::endl;
+        return;
+    }
+
+    c_p->add_member(r_p);
+
+    cout << "Member " << id << " " << r_p->title() << " added\n";
 }
 
 collection *catalog::find_collection_by_name(string name)
 {
     auto it = find_if(catalog_.begin(), catalog_.end(), collection_cmp_ftor(name));
 
-    if (it != catalog_.end())
+    if (it == catalog_.end())
         return nullptr;
     else
         return *it;
@@ -61,11 +83,11 @@ void catalog::print_collection(string name)
 
     if (p == nullptr)
     {
-        cout << str_cat_not_exist << std::endl;
+        cout << str_coll_not_exist << std::endl;
         return;
     }
 
-    cout << "Collection " << name << " contains:\n";
+    cout << "Collection " << name << " contains:" << std::endl;
     p->print();
 }
 
@@ -77,11 +99,11 @@ void catalog::print(void)
         return;
     }
 
-    cout << "Catalog contains " << collection_count_ << " collections:/n";
+    cout << "Catalog contains " << collection_count_ << " collections:" << std::endl;
 
     for (auto p : catalog_)
     {
-        cout << "Collection " << p->name() << " contains:\n";
+        cout << "Collection " << p->name() << " contains:" << std::endl;
         p->print();
     }
 }
