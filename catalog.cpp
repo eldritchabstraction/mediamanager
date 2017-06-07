@@ -10,24 +10,22 @@ using std::string;
 
 catalog * catalog::s_instance = NULL;
 
-struct collection_compare
+struct collection_cmp_ftor
 {
 public:
-    collection_compare(string candidate): candidate_(candidate) {};
+    collection_cmp_ftor(string candidate): candidate_(candidate) {};
 
     bool operator()(collection *c)
     {
         return (c->name() == candidate_);
     }
-
-
 private:
     string candidate_;
 };
 
 void catalog::add_collection(string name)
 {
-    auto collection_it = find_if(catalog_.begin(), catalog_.end(), collection_compare(name));
+    auto collection_it = find_if(catalog_.begin(), catalog_.end(), collection_cmp_ftor(name));
 
     if (collection_it != catalog_.end())
     {
@@ -48,7 +46,7 @@ void catalog::add_member(string name, string id)
 
 void catalog::print_collection(string name)
 {
-    auto it = find_if(catalog_.begin(), catalog_.end(), collection_compare(name));
+    auto it = find_if(catalog_.begin(), catalog_.end(), collection_cmp_ftor(name));
 
     if (it == catalog_.end())
     {

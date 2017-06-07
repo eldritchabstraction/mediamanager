@@ -13,20 +13,39 @@ using std::cout;
 // initialize static instance
 library *library::s_instance = 0;
 
-int library::add_record(string medium, string title)
+struct record_cmp_ftor
+{
+public:
+    record_cmp_ftor(int id): id_(id), title_("") {};
+    record_cmp_ftor(string title): title_(title), id_(0) {};
+    bool operator()(record *r)
+    {
+        if (r->title() == title_)
+            return 1;
+        else if (r->id() == id_)
+            return 1;
+        else
+            return 0;
+    }
+
+private:
+    int id_;
+    string title_;
+};
+
+void library::add_record(string medium, string title)
 {
     // check for invalid medium
     if (validate_medium(medium))
         error_print("invalid medium: " + medium);
 
     // check for duplicate names
-    for (auto it = library_.begin(); it != library_.end(); ++it)
+    auto p = find_if(library_.begin(), library_.end(),
+                     record_cmp_ftor(title));
+    if (p != library_.end())
     {
-        if ((*it)->title() == title)
-        {
-            cout << str_lib_dupe << std::endl;
-            return 1;
-        }
+        cout << str_lib_dupe << std::endl;
+        return;
     }
 
     library_.push_back(new record(medium, title, id_counter_));
@@ -34,8 +53,6 @@ int library::add_record(string medium, string title)
 
     id_counter_++;
     records_count_++;
-
-    return 0;
 }
 
 void library::print(void)
@@ -58,20 +75,10 @@ void library::print_alloc(void)
     cout << "Records: " << records_count_ << std::endl;
 }
 
-struct ftor_record_id_cmp
-{
-public:
-    ftor_record_id_cmp(int id): candidate_(id) {};
-    bool operator()(record *r) { return (r->id() == candidate_); }
-
-private:
-    int candidate_;
-};
-
 void library::print_id(string id)
 {
     auto it = find_if(library_.begin(), library_.end(),
-                             ftor_record_id_cmp(std::stoi(id, nullptr, 10)));
+                      record_cmp_ftor(std::stoi(id, nullptr, 10)));
 
     if (it == library_.end())
     {
@@ -82,20 +89,10 @@ void library::print_id(string id)
     (*it)->print();
 }
 
-struct ftor_record_title_cmp
-{
-public:
-    ftor_record_title_cmp(string title): candidate_(title) {};
-    bool operator()(record *r) { return (r->title() == candidate_); }
-
-private:
-    string candidate_;
-};
-
 void library::print_title(string title)
 {
     auto it = find_if(library_.begin(), library_.end(),
-                             ftor_record_title_cmp(title));
+                      record_cmp_ftor(title));
 
     if (it == library_.end())
     {
@@ -114,7 +111,7 @@ void library::modify_rating(string id, string rating)
         return;
     }
     auto it = find_if(library_.begin(), library_.end(),
-                             ftor_record_id_cmp(std::stoi(id, nullptr, 10)));
+                      record_cmp_ftor(std::stoi(id, nullptr, 10)));
 
     if (it == library_.end())
     {
@@ -130,7 +127,7 @@ void library::modify_rating(string id, string rating)
 void library::delete_record(string title)
 {
     auto it = find_if(library_.begin(), library_.end(),
-                             ftor_record_title_cmp(title));
+                      record_cmp_ftor(title));
 
     if (it == library_.end())
     {

@@ -15,9 +15,9 @@ public:
     static library *s_instance;
     library(): id_counter_(1), records_count_(0) {};
 
-    int add_record(std::string medium, std::string title);
-    int modify_record(record x);
+    void add_record(std::string medium, std::string title);
     void delete_record(std::string title);
+    int modify_record(record x);
 
     void modify_rating(std::string record_id, std::string rating);
 
