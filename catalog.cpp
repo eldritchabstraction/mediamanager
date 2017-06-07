@@ -42,6 +42,7 @@ void catalog::add_collection(string name)
 void catalog::add_member(string name, string id)
 {
 
+
 }
 
 void catalog::print_collection(string name)

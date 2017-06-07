@@ -64,6 +64,7 @@ static void parse(vector<string> input)
 
         glibrary->add_record(medium, title);
     } else if (command == "ac") {
+        // add collection to catalog
         string collection_name;
         for (auto it = input.begin() + 1; it != input.end(); ++it)
             collection_name += *it + " ";

@@ -24,6 +24,9 @@ public:
     int validate_id(std::string record_id);
     int validate_title(std::string title);
 
+    record * find_record_by_title(string title);
+    record * find_record_by_id(string id);
+
     void print(void);
     void print_alloc(void);
     void print_id(std::string record_id);

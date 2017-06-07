@@ -40,9 +40,9 @@ void library::add_record(string medium, string title)
         error_print("invalid medium: " + medium);
 
     // check for duplicate names
-    auto p = find_if(library_.begin(), library_.end(),
-                     record_cmp_ftor(title));
-    if (p != library_.end())
+    record *p = find_record_by_title(title);
+
+    if (p != nullptr)
     {
         cout << str_lib_dupe << std::endl;
         return;
@@ -77,30 +77,28 @@ void library::print_alloc(void)
 
 void library::print_id(string id)
 {
-    auto it = find_if(library_.begin(), library_.end(),
-                      record_cmp_ftor(std::stoi(id, nullptr, 10)));
+    record *p = find_record_by_id(id);
 
-    if (it == library_.end())
+    if (p == nullptr)
     {
         cout << str_record_id_not_exist << std::endl;
         return;
     }
 
-    (*it)->print();
+    p->print();
 }
 
 void library::print_title(string title)
 {
-    auto it = find_if(library_.begin(), library_.end(),
-                      record_cmp_ftor(title));
+    record *p = find_record_by_title(title);
 
-    if (it == library_.end())
+    if (p == nullptr)
     {
         cout << str_record_title_not_exist << std::endl;
         return;
     }
 
-    (*it)->print();
+    p->print();
 }
 
 void library::modify_rating(string id, string rating)
@@ -110,35 +108,67 @@ void library::modify_rating(string id, string rating)
         std::cout << str_rating_oob << std::endl;
         return;
     }
-    auto it = find_if(library_.begin(), library_.end(),
-                      record_cmp_ftor(std::stoi(id, nullptr, 10)));
 
-    if (it == library_.end())
+    record *p = find_record_by_id(id);
+
+    if (p == nullptr)
     {
         cout << str_record_id_not_exist << std::endl;
         return;
     }
 
-    (*it)->set_rating(rating);
+    p->set_rating(rating);
 
-    cout << "Rating for record " << (*it)->id() << " changed to " << rating << std::endl;
+    cout << "Rating for record " << p->id() << " changed to " << rating << std::endl;
 }
 
 void library::delete_record(string title)
+{
+    record *p = find_record_by_title(title);
+
+    if (p == nullptr)
+    {
+        cout << str_record_title_not_exist << std::endl;
+        return;
+    }
+
+    std::cout << "Record " << p->id() << " " << p->title() << " deleted\n";
+
+    // time to exercise the erase/remove idiom
+    library_.erase(std::remove_if(library_.begin(), library_.end(),
+                   record_cmp_ftor(title)), library_.end());
+
+    records_count_--;
+}
+
+record * library::find_record_by_id(string id)
+{
+    auto it = find_if(library_.begin(), library_.end(),
+                      record_cmp_ftor(std::stoi(id, nullptr, 10)));
+
+    if (it == library_.end())
+    {
+        return nullptr;
+    }
+    else
+    {
+        return *it;
+    }
+}
+
+record * library::find_record_by_title(string title)
 {
     auto it = find_if(library_.begin(), library_.end(),
                       record_cmp_ftor(title));
 
     if (it == library_.end())
     {
-        cout << str_record_title_not_exist << std::endl;
-        return;
+        return nullptr;
     }
-
-    std::cout << "Record " << (*it)->id() << " " << (*it)->title() << " deleted\n";
-
-    library_.erase(it);
-    records_count_--;
+    else
+    {
+        return *it;
+    }
 }
 
 int library::validate_medium(string medium)
