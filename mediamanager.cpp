@@ -10,6 +10,7 @@
 #include <cctype>
 #include <iostream>
 #include <fstream>
+#include <iterator>
 
 #include "strings.h"
 #include "debug.h"
@@ -47,6 +48,17 @@ static vector<string> split(const string input)
     return return_vector;
 }
 
+static string construct_title(vector<string> &input, vector<string>::iterator &it)
+{
+    string title;
+    for (; it != input.end(); ++it)
+        title += *it + " ";
+    // remove the last space
+    title.pop_back();
+
+    return title;
+}
+
 static void parse(vector<string> input)
 {
     if (input.empty())
@@ -58,19 +70,13 @@ static void parse(vector<string> input)
 
     if (command == "ar") {
         // add record
-        string medium = input[1], title;
-        for (auto it = input.begin() + 2; it != input.end(); ++it)
-            title += *it + " ";
-        // remove the last space
-        title.pop_back();
-
+        string medium = input[1];
+        vector<string>::iterator it = input.begin() + 2;
+        string title = construct_title(input, it);
         glibrary->add_record(medium, title);
     } else if (command == "ac") {
         // add collection to catalog
-        string collection_name;
-        for (auto it = input.begin() + 1; it != input.end(); ++it)
-            collection_name += *it + " ";
-        collection_name.pop_back();
+        string collection_name = input[1];
 
         gcatalog->add_collection(collection_name);
     } else if (command == "am") {
@@ -99,12 +105,7 @@ static void parse(vector<string> input)
         gcatalog->print_collection(collection_name);
     } else if (command == "fr") {
         // find and print record title
-        string title;
-        for (auto it = input.begin() + 1; it != input.end(); ++it)
-            title += *it + " ";
-        // remove the last space
-        title.pop_back();
-
+        string title = construct_title(input, ++input.begin());
         glibrary->print_title(title);
     } else if (command == "mr") {
         // modify rating
@@ -112,11 +113,7 @@ static void parse(vector<string> input)
         glibrary->modify_rating(id, rating);
     } else if (command == "dr") {
         // delete record with title
-        string title;
-        for (auto it = input.begin() + 1; it != input.end(); ++it)
-            title += *it + " ";
-        // remove the last space
-        title.pop_back();
+        string title = construct_title(input, ++input.begin());
         glibrary->delete_record(title);
     } else if (command == "sA") {
         // save all
