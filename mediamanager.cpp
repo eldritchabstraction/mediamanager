@@ -127,7 +127,61 @@ static void parse(vector<string> input)
         save << gcatalog->collection_count() << std::endl;
         gcatalog->print_save(save);
 
-        cout << "Data saved";
+        save.close();
+        cout << "Data saved\n";
+    } else if (command == "rA") {
+        // restore all
+        string save_filename = input[1];
+        std::ifstream save;
+
+        save.open(save_filename);
+        string line;
+        std::vector<string> lines;
+        while (std::getline(save, line))
+            lines.push_back(line);
+
+        std::vector<string>::iterator it = lines.begin();
+        // the first line is the records count
+        int records_count = std::stoi(*it, nullptr, 10);
+        // iterate over the records
+        for (int i = 0; i < records_count; i++)
+        {
+            // reusing the variable line declared above
+            vector<string> line = split(*(++it));
+            // iterate through the words in line
+            std::vector<string>::iterator jt = line.begin();
+            string record_id = *jt;
+            record_id.pop_back();
+            string medium = *(++jt);
+            string rating = *(++jt);
+            string title = construct_title(line, ++jt);
+
+            glibrary->add_record(medium, title);
+            if (rating != "u")
+                glibrary->modify_rating(record_id, rating);
+        }
+        // this line is the collections count
+        int collections_count = std::stoi(*(++it), nullptr, 10);
+        // iterate over the collections
+        for (int i = 0; i < collections_count; ++i)
+        {
+            // reusing the variable line declared above
+            vector<string> line = split(*(++it));
+            string collection_name = line[0];
+            int members_count = std::stoi(line[1], nullptr, 10);
+
+            gcatalog->add_collection(collection_name);
+            // iterate over the members
+            for (int j = 0; j < members_count; ++j)
+            {
+                int record_id = glibrary->find_record_by_title(*++it)->id();
+                gcatalog->add_member(collection_name, std::to_string(record_id));
+            }
+        }
+
+        cout << "Data loaded\n";
+
+        save.close();
     } else if (command == "qq") {
         // quit
         cout << str_done << std::endl;
