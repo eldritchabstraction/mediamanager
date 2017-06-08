@@ -11,8 +11,8 @@ void collection::print()
 {
     if (collection_.empty())
         cout << "None\n";
-    for (auto record_it : collection_)
-        record_it->print();
+    for (auto it : collection_)
+        cout << *it << std::endl;
 
 }
 

@@ -13,6 +13,12 @@ public:
     void print (void) { std::cout << id_ << ": " << medium_ << " " << rating_
                                   << " " << title_ << std::endl; }
 
+    friend std::ostream& operator<<(std::ostream &stream, record &r)
+    {
+        stream << r.id() << ": " << r.medium() << " " << r.rating() << " " << r.title();
+        return stream;
+    }
+
     std::string title(void) { return title_; }
     std::string medium(void) { return medium_; }
     std::string rating(void) { return rating_; }

@@ -66,7 +66,7 @@ void library::print(void)
     cout << "Library contains " << records_count_ << " records:\n";
     for (auto p: library_)
     {
-        p->print();
+        cout << *p << std::endl;
     }
 }
 
@@ -85,7 +85,7 @@ void library::print_id(string id)
         return;
     }
 
-    p->print();
+    cout << *p << std::endl;
 }
 
 void library::print_title(string title)
@@ -98,7 +98,7 @@ void library::print_title(string title)
         return;
     }
 
-    p->print();
+    cout << *p << std::endl;
 }
 
 void library::modify_rating(string id, string rating)
