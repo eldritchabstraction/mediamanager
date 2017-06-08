@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <algorithm>
 
@@ -106,6 +107,21 @@ void catalog::print(void)
         cout << "Collection " << p->name() << " contains:" << std::endl;
         p->print();
     }
+}
+
+void catalog::print_save(std::ofstream &save)
+{
+    if (catalog_.empty())
+    {
+        return;
+    }
+
+    for (auto p : catalog_)
+    {
+        save << p->name() << " " << p->member_count() << std::endl;
+        p->print_title(save);
+    }
+
 }
 
 void catalog::print_alloc(void)

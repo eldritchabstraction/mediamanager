@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 
 #include "collection.h"
@@ -13,7 +14,14 @@ void collection::print()
         cout << "None\n";
     for (auto it : collection_)
         cout << *it << std::endl;
+}
 
+void collection::print_title(std::ofstream &save)
+{
+    if (collection_.empty())
+        return;
+    for (auto it : collection_)
+        save << it->title() << std::endl;
 }
 
 void collection::add_member(record *record_ptr)

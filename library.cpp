@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <algorithm>
 
@@ -67,6 +68,19 @@ void library::print(void)
     for (auto p: library_)
     {
         cout << *p << std::endl;
+    }
+}
+
+void library::print_save(std::ofstream &save)
+{
+    if (library_.empty())
+    {
+        return;
+    }
+
+    for (auto p: library_)
+    {
+        save << *p << std::endl;
     }
 }
 

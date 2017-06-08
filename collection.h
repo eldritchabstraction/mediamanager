@@ -19,8 +19,11 @@ class collection
 public:
     collection(std::string name): name_(name) {};
     void add_member(record *record_ptr);
+    int member_count() { return collection_.size(); }
 
     void print(void);
+    // used explicitly for saves, which is annoying
+    void print_title(std::ofstream &save);
 
     std::string name() { return name_; }
 

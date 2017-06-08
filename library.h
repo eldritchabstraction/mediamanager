@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
+#include <fstream>
 
 #include "record.h"
 
@@ -28,6 +30,7 @@ public:
     record * find_record_by_id(string id);
 
     void print(void);
+    void print_save(std::ofstream &save);
     void print_alloc(void);
     void print_id(std::string record_id);
     void print_title(std::string title);
@@ -39,6 +42,8 @@ public:
 
         return s_instance;
     }
+
+    int records_count(void) { return records_count_; }
 private:
     int validate_medium(std::string medium);
 

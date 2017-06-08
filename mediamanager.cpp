@@ -8,6 +8,8 @@
 #include <list>
 #include <algorithm>
 #include <cctype>
+#include <iostream>
+#include <fstream>
 
 #include "strings.h"
 #include "debug.h"
@@ -116,6 +118,19 @@ static void parse(vector<string> input)
         // remove the last space
         title.pop_back();
         glibrary->delete_record(title);
+    } else if (command == "sA") {
+        // save all
+        string save_filename = input[1];
+        std::ofstream save;
+
+        save.open(save_filename);
+        save << glibrary->records_count() << std::endl;
+        glibrary->print_save(save);
+
+        save << gcatalog->collection_count() << std::endl;
+        gcatalog->print_save(save);
+
+        cout << "Data saved";
     } else if (command == "qq") {
         // quit
         cout << str_done << std::endl;

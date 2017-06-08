@@ -21,9 +21,11 @@ public:
     collection *find_collection_by_name(string collection_name);
 
     void print(void);
+    void print_save(std::ofstream &save);
     void print_collection(std::string collection_name);
     void print_alloc(void);
 
+    int collection_count(void) { return collection_count_; };
 
     static catalog* instance(void)
     {
