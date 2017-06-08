@@ -128,3 +128,12 @@ void catalog::print_alloc(void)
 {
     cout << "Collections: " << collection_count_ << std::endl;
 }
+
+void catalog::clear(void)
+{
+    for (auto c : catalog_)
+        delete c;
+
+    collection_count_ = 0;
+    catalog_.clear();
+}

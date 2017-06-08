@@ -190,3 +190,13 @@ int library::validate_medium(string medium)
     return (medium != "DVD" && medium != "VHS");
 }
 
+void library::clear(void)
+{
+    id_counter_ = 1;
+    records_count_ = 0;
+    for (auto r : library_)
+        delete r;
+    library_.clear();
+
+}
+

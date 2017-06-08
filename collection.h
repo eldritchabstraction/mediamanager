@@ -18,6 +18,8 @@ class collection
 {
 public:
     collection(std::string name): name_(name) {};
+    // I don't think I actually need to do this
+    ~collection(void) { collection_.clear(); }
     void add_member(record *record_ptr);
     int member_count() { return collection_.size(); }
 

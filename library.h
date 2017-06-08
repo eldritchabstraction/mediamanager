@@ -35,6 +35,8 @@ public:
     void print_id(std::string record_id);
     void print_title(std::string title);
 
+    void clear(void);
+
     static library * instance()
     {
         if (!s_instance)
@@ -44,6 +46,8 @@ public:
     }
 
     int records_count(void) { return records_count_; }
+
+    void set_id_counter(int id_counter) { id_counter_ = id_counter; }
 private:
     int validate_medium(std::string medium);
 

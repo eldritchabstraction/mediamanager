@@ -140,6 +140,8 @@ static void parse(vector<string> input)
         while (std::getline(save, line))
             lines.push_back(line);
 
+        // ugh, this is an entirely different thing I'm doing simultaneously
+        int max_record_id = 0;
         std::vector<string>::iterator it = lines.begin();
         // the first line is the records count
         int records_count = std::stoi(*it, nullptr, 10);
@@ -151,15 +153,18 @@ static void parse(vector<string> input)
             // iterate through the words in line
             std::vector<string>::iterator jt = line.begin();
             string record_id = *jt;
+            int id = std::stoi(record_id, nullptr, 10);
             record_id.pop_back();
             string medium = *(++jt);
             string rating = *(++jt);
             string title = construct_title(line, ++jt);
+            max_record_id = (id > max_record_id ? id : max_record_id);
 
             glibrary->add_record(medium, title);
             if (rating != "u")
                 glibrary->modify_rating(record_id, rating);
         }
+        glibrary->set_id_counter(max_record_id + 1);
         // this line is the collections count
         int collections_count = std::stoi(*(++it), nullptr, 10);
         // iterate over the collections
@@ -182,8 +187,24 @@ static void parse(vector<string> input)
         cout << "Data loaded\n";
 
         save.close();
+    } else if (command == "cL") {
+        // clear library
+        glibrary->clear();
+        cout << str_record_deleted << std::endl;
+    } else if (command == "cC") {
+        // clear collections
+        gcatalog->clear();
+        cout << str_coll_deleted << std::endl;
+    } else if (command == "cA") {
+        // clear all
+        glibrary->clear();
+        gcatalog->clear();
+        cout << str_data_deleted << std::endl;
     } else if (command == "qq") {
         // quit
+        glibrary->clear();
+        gcatalog->clear();
+        cout << str_data_deleted << std::endl;
         cout << str_done << std::endl;
         exit(1);
     } else {

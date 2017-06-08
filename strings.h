@@ -37,11 +37,9 @@ const string str_collections = "Collections: ";
 //"Record " " deleted"
 //"Collection " " deleted"
 //"Member " " deleted"
-//"All collections deleted"
-//"All records deleted"
-//"All data deleted"
-//"Data saved"
-//"Data loaded"
+const string str_coll_deleted = "All collections deleted";
+const string str_record_deleted = "All records deleted";
+const string str_data_deleted = "All data deleted";
 
 /* command error messages */
 const string str_unhandled_command = "Unrecognized command!";

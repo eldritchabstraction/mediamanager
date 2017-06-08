@@ -27,6 +27,8 @@ public:
 
     int collection_count(void) { return collection_count_; };
 
+    void clear(void);
+
     static catalog* instance(void)
     {
         if (!s_instance)
