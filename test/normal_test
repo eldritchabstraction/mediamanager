@@ -1,0 +1,6 @@
+#!/bin/bash
+
+../build/bin/mediamanager < normal_test_resources/normal_in.txt > normal_test_resources/henry_out.txt; meld normal_test_resources/henry_out.txt normal_test_resources/normal_out.txt
+
+rm savefile1.txt
+rm normal_test_resources/henry_out.txt
