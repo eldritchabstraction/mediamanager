@@ -187,6 +187,9 @@ static void parse(vector<string> input)
         cout << "Data loaded\n";
 
         save.close();
+    } else if (command == "dc") {
+        // delete collection
+        gcatalog->delete_collection(input[1]);
     } else if (command == "cL") {
         // clear library
         glibrary->clear();

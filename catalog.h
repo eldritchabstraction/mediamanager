@@ -15,6 +15,7 @@ public:
     catalog(): collection_count_(0) {};
 
     void add_collection(std::string collection_name);
+    void delete_collection(std::string collection_name);
 
     void add_member(std::string collection_name, std::string record_id);
 

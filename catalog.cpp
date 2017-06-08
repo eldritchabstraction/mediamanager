@@ -44,6 +44,25 @@ void catalog::add_collection(string name)
     collection_count_++;
 }
 
+void catalog::delete_collection(string name)
+{
+    collection *p = find_collection_by_name(name);
+
+    if (p == nullptr)
+    {
+        cout << str_coll_not_exist << std::endl;
+        return;
+    }
+
+    catalog_.erase(std::remove_if(catalog_.begin(), catalog_.end(),
+                                  collection_cmp_ftor(name)), catalog_.end());
+    cout << "Collection " << name << " deleted\n";
+
+    collection_count_--;
+}
+
+
+
 void catalog::add_member(string name, string id)
 {
     // check if collection exists
